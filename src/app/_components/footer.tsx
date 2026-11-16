@@ -1,5 +1,6 @@
 import Image from "next/image"
 import Link from "next/link"
+import { ArrowUpRight, MapPin } from "lucide-react"
 
 const footItems = [
   { label: "Beranda", href: "/"},
@@ -9,8 +10,8 @@ const footItems = [
 ]
 
 const socmed = [
-  { src: "/instagram.svg", href: "#" },
-  { src: "/facebook.svg", href: "#" },
+  { src: "/instagram.svg", href: "#", label: "Instagram"},
+  { src: "/facebook.svg", href: "#", label: "Facebook" },
 ]
 
 export default function Footer() {
@@ -54,22 +55,57 @@ export default function Footer() {
           © 2025 - FAATHUL BAARI ISLAMIC SCHOOL
         </p>
 
-        <div className="flex gap-3 justify-end items-end h-full">
+        <div className="flex flex-col max-md:hidden justify-between h-full">
+          <div className="flex gap-6 justify-end items-start h-full w-full">
             {socmed.map((item) => (
               <Link
                 key={item.src}
                 href={item.href}
-                className="font-light text-white hover:font-bold duration-200 transition-all">
+                className="font-light flex gap-2 text-white hover:font-bold duration-200 transition-all">
                   <Image 
                     src={item.src}
                     width={25}
                     height={25}
                     alt="logo"
                     className=""/>
+                  <span className="text-xl flex gap-1">
+                    {item.label}
+                    <ArrowUpRight />
+                  </span>
               </Link>
             ))}
+          </div>
+
+          <div className="flex max-md:hidden gap-2 justify-end text-white">
+            <MapPin />
+            Jl. Pendidikan Islami No. 12 (Akses Tol 10 Menit)
+          </div>
         </div>
       </div>
+
+      <div className="flex-col max-md:flex hidden justify-between h-full">
+        <div className="flex gap-6 justify-start items-start h-full w-full">
+          {socmed.map((item) => (
+            <Link
+              key={item.src}
+              href={item.href}
+              className="font-light flex gap-2 text-white hover:font-bold duration-200 transition-all">
+                <Image 
+                  src={item.src}
+                  width={25}
+                  height={25}
+                  alt="logo"
+                  className=""/>
+                <span className="text-xl flex gap-1">
+                  {item.label}
+                  <ArrowUpRight />
+                </span>
+            </Link>
+          ))}
+        </div>
+        
+      </div>
+          
     </footer>
   )
 }
