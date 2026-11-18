@@ -36,7 +36,7 @@ export function AppHeader() {
                       >
                         <BreadcrumbItem>
                           {isLast || !item.href ? (
-                            <BreadcrumbPage className="bg-[#D9EAF8] px-3.5 py-1 rounded-full text-[#006384]">
+                            <BreadcrumbPage className="bg-dark-greenblue inset-shadow-sm inset-shadow-indigo-200 px-4 py-1 rounded-full text-white">
                               {item.title}
                             </BreadcrumbPage>
                           ) : (
