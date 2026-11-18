@@ -1,31 +1,32 @@
 import { relations, sql } from "drizzle-orm";
 import { index, sqliteTable } from "drizzle-orm/sqlite-core";
+// import { text } from "stream/consumers";
 
 /**
  * Multi-project schema prefix helper
  */
 
 // Posts example table
-export const posts = sqliteTable(
-  "post",
-  (d) => ({
-    id: d.integer({ mode: "number" }).primaryKey({ autoIncrement: true }),
-    name: d.text({ length: 256 }),
-    createdById: d
-      .text({ length: 255 })
-      .notNull()
-      .references(() => user.id),
-    createdAt: d
-      .integer({ mode: "timestamp" })
-      .default(sql`(unixepoch())`)
-      .notNull(),
-    updatedAt: d.integer({ mode: "timestamp" }).$onUpdate(() => new Date()),
-  }),
-  (t) => [
-    index("created_by_idx").on(t.createdById),
-    index("name_idx").on(t.name),
-  ],
-);
+// export const posts = sqliteTable(
+//   "post",
+//   (d) => ({
+//     id: d.integer({ mode: "number" }).primaryKey({ autoIncrement: true }),
+//     name: d.text({ length: 256 }),
+//     createdById: d
+//       .text({ length: 255 })
+//       .notNull()
+//       .references(() => user.id),
+//     createdAt: d
+//       .integer({ mode: "timestamp" })
+//       .default(sql`(unixepoch())`)
+//       .notNull(),
+//     updatedAt: d.integer({ mode: "timestamp" }).$onUpdate(() => new Date()),
+//   }),
+//   (t) => [
+//     index("created_by_idx").on(t.createdById),
+//     index("name_idx").on(t.name),
+//   ],
+// );
 
 // Better Auth core tables
 export const user = sqliteTable("user", (d) => ({
@@ -132,3 +133,19 @@ export const verification = sqliteTable(
   }),
   (t) => [index("verification_identifier_idx").on(t.identifier)],
 );
+
+export const news = sqliteTable(
+  "news",
+  (d) => ({
+    id: d
+      .text({ length: 255 })
+      .notNull()
+      .primaryKey()
+      .$defaultFn(() => crypto.randomUUID()),
+    coverImage: d.text({ mode: 'text' }).notNull().default('default-image.png'),
+    title: d.text({ length: 255 }).notNull(),
+    teaser: d.text({ length: 255 }).notNull(),
+    content: d.text({ mode: 'text' }).notNull(),
+    createdAt: d.integer({ mode: 'timestamp' }).default(new Date),
+  })
+)
