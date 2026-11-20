@@ -17,7 +17,7 @@ export function AppHeader() {
   const { breadcrumbs } = useBreadcrumb();
 
   return (
-    <header className="sticky top-0 z-20 flex h-[7vh] items-center bg-[#F5FAFF] px-4">
+    <header className="sticky top-0 z-30 flex h-[7vh] items-center bg-[#F5FAFF] px-4">
       <div className="flex justify-between items-center w-full">
         <div className="flex items-center justify-start">
           <SidebarTrigger className="cursor-pointer" />

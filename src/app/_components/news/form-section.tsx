@@ -3,11 +3,12 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React, { useState, useEffect, useRef } from "react";
-import { Headset, GraduationCap, Lightbulb } from "lucide-react";
+import { Headset, GraduationCap, Lightbulb, Loader2 } from "lucide-react";
 import { toast } from "sonner";
+import { useNavigationLoader } from "@/components/app-layout/navigation-loader";
 import { Button } from "@/components/ui/button";
 import RichTextEditor from "@/components/rich-text-editor";
-import { useNavigationLoader } from "@/components/app-layout/navigation-loader";
+import { uploadFileToGithub } from "@/lib/github-storage";
 
 export interface NewsFormData {
   id?: string;
@@ -35,6 +36,8 @@ export default function FormSection({
   const [content, setContent] = useState(initialData?.content ?? "");
   const [coverFile, setCoverFile] = useState<File | null>(null);
   const [coverPreview, setCoverPreview] = useState(initialData?.coverImage ?? "");
+  const [uploadedCoverUrl, setUploadedCoverUrl] = useState(initialData?.coverImage ?? "");
+  const [isUploadingImage, setIsUploadingImage] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { startLoading, stopLoading } = useNavigationLoader();
 
@@ -44,6 +47,7 @@ export default function FormSection({
       setTeaser(initialData.teaser);
       setContent(initialData.content);
       setCoverPreview(initialData.coverImage);
+      setUploadedCoverUrl(initialData.coverImage);
     }
   }, [initialData]);
 
@@ -55,7 +59,7 @@ export default function FormSection({
     };
   }, [coverPreview]);
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
 
@@ -72,12 +76,34 @@ export default function FormSection({
     setCoverFile(file);
     const previewUrl = URL.createObjectURL(file);
     setCoverPreview(previewUrl);
+    setIsUploadingImage(true);
+
+    try {
+      const cdnUrl = await uploadFileToGithub(file, "news");
+      setUploadedCoverUrl(cdnUrl);
+      toast.success("Gambar berhasil diunggah");
+    } catch (error) {
+      console.error(error);
+      toast.error("Gagal mengunggah gambar ke GitHub");
+      setCoverPreview(uploadedCoverUrl || "");
+      setCoverFile(null);
+      if (fileInputRef.current) {
+        fileInputRef.current.value = "";
+      }
+    } finally {
+      setIsUploadingImage(false);
+    }
   };
 
   const handleFormSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (mode === "create" && !coverFile && !coverPreview) {
+    if (isUploadingImage) {
+      toast.warning("Tunggu hingga proses unggah gambar selesai");
+      return;
+    }
+
+    if (!uploadedCoverUrl) {
       toast.error("Cover berita wajib diunggah");
       return;
     }
@@ -99,7 +125,7 @@ export default function FormSection({
     }
 
     const payload: NewsFormData = {
-      coverImage: "https://cdn.jsdelivr.net/gh/khaslanacorp/fabis-assets@main/fabis-default.png",
+      coverImage: uploadedCoverUrl,
       title: title.trim(),
       teaser: teaser.trim(),
       content,
@@ -135,6 +161,7 @@ export default function FormSection({
         setContent("");
         setCoverFile(null);
         setCoverPreview("");
+        setUploadedCoverUrl("");
         if (fileInputRef.current) {
           fileInputRef.current.value = "";
         }
@@ -177,16 +204,20 @@ export default function FormSection({
           />
 
           <div
-            onClick={() => fileInputRef.current?.click()}
+            onClick={() => {
+              if (!isUploadingImage) fileInputRef.current?.click();
+            }}
             role="button"
             tabIndex={0}
             onKeyDown={(e) => {
-              if (e.key === "Enter" || e.key === " ") {
+              if ((e.key === "Enter" || e.key === " ") && !isUploadingImage) {
                 e.preventDefault();
                 fileInputRef.current?.click();
               }
             }}
-            className="relative w-full h-72 md:h-80 rounded-2xl border border-dark-greenblue overflow-hidden flex flex-col items-center justify-center cursor-pointer group select-none bg-[#8E8E8E]"
+            className={`relative w-full h-72 md:h-80 rounded-2xl border border-dark-greenblue overflow-hidden flex flex-col items-center justify-center group select-none bg-[#8E8E8E] ${
+              isUploadingImage ? "cursor-wait" : "cursor-pointer"
+            }`}
           >
             <div
               className="absolute inset-0 opacity-25"
@@ -197,6 +228,14 @@ export default function FormSection({
                 backgroundPosition: "0 0, 0 24px, 24px -24px, -24px 0",
               }}
             />
+            {isUploadingImage && (
+              <div className="absolute inset-0 z-30 bg-black/50 backdrop-blur-[1px] flex flex-col items-center justify-center gap-2 text-white">
+                <Loader2 className="w-10 h-10 animate-spin text-[#EAB308]" />
+                <span className="text-xs font-medium bg-black/60 px-3 py-1 rounded-full">
+                  Mengunggah gambar...
+                </span>
+              </div>
+            )}
             {coverPreview && coverPreview !== "default-image.png" ? (
               <>
                 {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -278,11 +317,13 @@ export default function FormSection({
           disabled={isSubmitting}
           className="w-full py-6 rounded-xl bg-gradient-to-b from-[#D97706] to-[#B45309] hover:from-[#B45309] hover:to-[#92400E] text-white font-semibold text-base shadow-md cursor-pointer transition-all"
         >
-          {isSubmitting
-            ? "Menyimpan..."
-            : mode === "edit"
-              ? "Simpan Perubahan"
-              : "Simpan"}
+          {isUploadingImage
+            ? "Menunggu Unggah Gambar..."
+            : isSubmitting
+              ? "Menyimpan..."
+              : mode === "edit"
+                ? "Simpan Perubahan"
+                : "Simpan"}
         </Button>
       </form>
 
