@@ -1,7 +1,9 @@
 import { NextResponse } from "next/server";
+import { inArray } from "drizzle-orm";
 import { z } from "zod";
 import { db } from "@/server/db";
 import { news } from "@/server/db/schema";
+import { deleteFileFromGithub } from "@/lib/github-storage";
 
 const createNewsSchema = z.object({
   coverImage: z.string().min(1, "Cover berita wajib diisi"),
@@ -21,6 +23,10 @@ const createNewsSchema = z.object({
       (val) => val.replace(/<[^>]*>/g, "").trim().length > 3,
       "Isi berita wajib diisi",
     ),
+});
+
+const deleteNewsSchema = z.object({
+  ids: z.array(z.string().min(1)).min(1, "Minimal pilih 1 berita untuk dihapus"),
 });
 
 export async function POST(req: Request) {
@@ -56,6 +62,44 @@ export async function POST(req: Request) {
     console.error("POST /api/news error:", error);
     return NextResponse.json(
       { message: "Terjadi kesalahan pada server" },
+      { status: 500 },
+    );
+  }
+}
+
+export async function DELETE(req: Request) {
+  try {
+    const body = (await req.json()) as unknown;
+    const parsed = deleteNewsSchema.safeParse(body);
+
+    if (!parsed.success) {
+      return NextResponse.json(
+        { message: parsed.error.issues[0]?.message ?? "Data tidak valid" },
+        { status: 400 },
+      );
+    }
+
+    const targets = await db
+      .select({ id: news.id, coverImage: news.coverImage })
+      .from(news)
+      .where(inArray(news.id, parsed.data.ids));
+
+    for (const item of targets) {
+      if (item.coverImage) {
+        await deleteFileFromGithub(item.coverImage);
+      }
+    }
+
+    await db.delete(news).where(inArray(news.id, parsed.data.ids));
+
+    return NextResponse.json(
+      { message: "Berita dan gambar berhasil dihapus" },
+      { status: 200 },
+    );
+  } catch (error) {
+    console.error("DELETE /api/news error:", error);
+    return NextResponse.json(
+      { message: "Terjadi kesalahan saat menghapus berita" },
       { status: 500 },
     );
   }

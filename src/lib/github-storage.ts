@@ -10,6 +10,7 @@ interface GithubContentResponse {
   sha: string;
 }
 
+// client
 function getClientConfig(): GithubConfig {
   const username = process.env.NEXT_PUBLIC_GITHUB_USERNAME;
   const repository = process.env.NEXT_PUBLIC_GITHUB_REPOSITORY;
@@ -108,12 +109,15 @@ export async function deleteFileFromGithub(imageUrl: string): Promise<void> {
     headers: githubHeaders(),
   });
 
-  if (!response.ok) return;
+  if (!response.ok) {
+    const body = await response.text();
+    throw new Error(`Failed to get GitHub file: ${response.status} ${body}`);
+  }
 
   const content = (await response.json()) as GithubContentResponse;
   if (!content.sha) return;
 
-  await fetch(apiUrl(path), {
+  const deleteResponse = await fetch(apiUrl(path), {
     method: "DELETE",
     headers: githubHeaders(),
     body: JSON.stringify({
@@ -122,4 +126,9 @@ export async function deleteFileFromGithub(imageUrl: string): Promise<void> {
       branch: config.branch,
     }),
   });
+
+  if (!deleteResponse.ok && deleteResponse.status !== 404) {
+    const body = await deleteResponse.text();
+    throw new Error(`GitHub delete failed: ${deleteResponse.status} ${body}`);
+  }
 }
