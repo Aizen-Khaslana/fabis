@@ -141,10 +141,10 @@ export const news = sqliteTable(
       .notNull()
       .primaryKey()
       .$defaultFn(() => crypto.randomUUID()),
-    coverImage: d.text({ mode: 'text' }).notNull().default('default-image.png'),
+    coverImage: d.text({ mode: 'text' }).notNull().default('fabis-default.png'),
     title: d.text({ length: 255 }).notNull(),
     teaser: d.text({ length: 255 }).notNull(),
     content: d.text({ mode: 'text' }).notNull(),
-    createdAt: d.integer({ mode: 'timestamp' }).default(new Date),
+    createdAt: d.integer({ mode: 'timestamp' }).default(sql`(unixepoch())`).notNull(),
   })
 )

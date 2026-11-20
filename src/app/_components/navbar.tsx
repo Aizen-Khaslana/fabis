@@ -41,7 +41,7 @@ export default function Navbar() {
       <div className="max-md:hidden">
         <Link
           href="https://wa.me/6281211066905"
-          className="font-bricolage bg-dark-greenblue hover:bg-greenblue flex cursor-pointer gap-2 rounded-[999] px-8 py-2.5 text-lg text-white inset-shadow-red-100 transition-all duration-200"
+          className="font-bricolage bg-dark-greenblue hover:bg-greenblue inset-shadow-sm inset-shadow-indigo-200 flex cursor-pointer gap-2 rounded-[999] px-8 py-2.5 text-lg text-white transition-all duration-200"
         >
           Contact
           <ArrowUpRight />

@@ -11,6 +11,7 @@ import Loader from "@/components/loader";
 
 interface NavigationLoaderContextType {
   startLoading: () => void;
+  stopLoading: () => void;
 }
 
 const NavigationLoaderContext = createContext<NavigationLoaderContextType | null>(null);
@@ -31,8 +32,10 @@ export function NavigationLoaderProvider({
     setLoading(true);
   };
 
+  const stopLoading = () => setLoading(false);
+
   return (
-    <NavigationLoaderContext.Provider value={{ startLoading }}>
+    <NavigationLoaderContext.Provider value={{ startLoading, stopLoading }}>
       {children}
 
       {loading && (

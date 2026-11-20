@@ -1,15 +1,9 @@
 import Link from "next/link";
 import { Calendar } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { type InferSelectModel } from "drizzle-orm";
+import { type news } from "@/server/db/schema";
 
-interface NewsItem {
-  id: string;
-  coverImage: string;
-  title: string;
-  teaser: string;
-  content: string;
-  createdAt: Date;
-}
+type NewsItem = InferSelectModel<typeof news>;
 
 function formatDate(date: Date) {
   return new Intl.DateTimeFormat("id-ID", {
@@ -19,74 +13,23 @@ function formatDate(date: Date) {
   }).format(date);
 }
 
-export default function NewsSection() {
-  const newsList: NewsItem[] = [
-    {
-      id: "1",
-      coverImage: "/images/school-building.jpg",
-      title: "FABIS menjuarai lomba Panahan tingkat Provinsi Jawa Barat",
-      teaser:
-        "Fabis berhasil meraih gelar juara dalam lomba panahan tingkat provinsi.",
-      content: "Konten lengkap berita juara panahan...",
-      createdAt: new Date("2026-10-12"),
-    },
-    {
-      id: "2",
-      coverImage: "/images/school-building.jpg",
-      title: "Penerimaan Peserta Didik Baru (PPDB) Tahun Ajaran 2026/2027",
-      teaser:
-        "Pendaftaran gelombang pertama telah resmi dibuka untuk jenjang SD dan SMP.",
-      content: "Konten lengkap informasi PPDB...",
-      createdAt: new Date("2026-10-18"),
-    },
-    {
-      id: "3",
-      coverImage: "/images/school-building.jpg",
-      title: "Kegiatan Tahfidz Camp dan Mabit Bersama Siswa",
-      teaser:
-        "Meningkatkan kecintaan siswa terhadap Al-Qur'an melalui kegiatan bermalam di sekolah.",
-      content: "Konten lengkap kegiatan tahfidz camp...",
-      createdAt: new Date("2026-10-25"),
-    },
-    {
-      id: "4",
-      coverImage: "/images/school-building.jpg",
-      title: "Kunjungan Edukatif ke Museum Geologi Bandung",
-      teaser:
-        "Siswa kelas 5 belajar sejarah bumi dan bebatuan secara langsung di lapangan.",
-      content: "Konten lengkap kunjungan edukatif...",
-      createdAt: new Date("2026-11-02"),
-    },
-    {
-      id: "5",
-      coverImage: "/images/school-building.jpg",
-      title: "Pelatihan Public Speaking dan Leadership OSIS FABIS",
-      teaser:
-        "Membekali pengurus OSIS dengan kemampuan komunikasi dan kepemimpinan yang efektif.",
-      content: "Konten lengkap pelatihan leadership...",
-      createdAt: new Date("2026-11-10"),
-    },
-    {
-      id: "6",
-      coverImage: "/images/school-building.jpg",
-      title: "Peringatan Hari Pahlawan dengan Lomba Kostum & Drama",
-      teaser:
-        "Menumbuhkan semangat nasionalisme siswa melalui pentas seni bertema kepahlawanan.",
-      content: "Konten lengkap peringatan hari pahlawan...",
-      createdAt: new Date("2026-11-15"),
-    },
-  ];
+interface NewsSectionProps {
+  newsList: NewsItem[];
+}
 
+export default function NewsSection({
+  newsList,
+}: NewsSectionProps) {
   return (
-    <div className="w-full flex flex-col border border-dark-greenblue rounded-2xl min-h-32 p-6 space-y-6">
+    <div className="w-full flex flex-col bg-white border border-dark-greenblue rounded-2xl min-h-32 p-6 space-y-6">
       <div className="flex justify-between items-end">
         <span className="bg-[#FFEAD5] rounded-lg p-2 text-2xl text-dark-orange font-medium font-bricolage w-fit">
-          Daftar Berita
+          Daftar Berita Terbaru
         </span>
         <div className="flex items-center gap-6">
-          <Button className="px-6 py-1.5 bg-greenblue hover:bg-dark-greenblue inset-shadow-sm inset-shadow-indigo-200 text-white text-lg cursor-pointer">
+          {/* <Button className="px-6 py-1.5 bg-greenblue hover:bg-dark-greenblue inset-shadow-sm inset-shadow-indigo-200 text-white text-lg cursor-pointer">
             Kelola
-          </Button>
+          </Button> */}
           <Link
             href="#"
             className="text-lg text-dark-greenblue cursor-pointer hover:underline"
