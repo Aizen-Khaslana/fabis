@@ -49,7 +49,7 @@ export default function Navbar() {
       </div>
 
       {isOpen && (
-        <div className="text-dark-greenblue absolute top-18 right-0 flex w-full flex-col items-end gap-3.5 bg-white px-4 py-8 text-2xl font-medium">
+        <div className="max-md:flex hidden text-dark-greenblue absolute top-18 right-0 w-full flex-col items-end gap-3.5 bg-white px-4 py-8 text-2xl font-medium">
           {navItems.map((item) => (
             <Link
               key={item.href}
