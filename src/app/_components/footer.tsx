@@ -34,7 +34,7 @@ export default function Footer() {
         </p>
       </div>
 
-      <div className="flex-2 flex gap-3">
+      <div className="flex gap-3">
         <div className="flex flex-col gap-3">
           <span className="font-bricolage text-2xl font-normal text-white">
             Tautan Cepat
