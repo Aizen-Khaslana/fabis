@@ -17,7 +17,7 @@ export function AppHeader() {
   const { breadcrumbs } = useBreadcrumb();
 
   return (
-    <header className="sticky top-0 z-20 flex h-[7vh] items-center bg-[#F5FAFF] px-4">
+    <header className="sticky top-0 z-30 flex h-[7vh] items-center bg-[#F5FAFF] px-4">
       <div className="flex justify-between items-center w-full">
         <div className="flex items-center justify-start">
           <SidebarTrigger className="cursor-pointer" />
@@ -36,7 +36,7 @@ export function AppHeader() {
                       >
                         <BreadcrumbItem>
                           {isLast || !item.href ? (
-                            <BreadcrumbPage className="bg-[#D9EAF8] px-3.5 py-1 rounded-full text-[#006384]">
+                            <BreadcrumbPage className="bg-dark-greenblue inset-shadow-sm inset-shadow-indigo-200 px-4 py-1 rounded-full text-white">
                               {item.title}
                             </BreadcrumbPage>
                           ) : (

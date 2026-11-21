@@ -132,3 +132,19 @@ export const verification = sqliteTable(
   }),
   (t) => [index("verification_identifier_idx").on(t.identifier)],
 );
+
+export const news = sqliteTable(
+  "news",
+  (d) => ({
+    id: d
+      .text({ length: 255 })
+      .notNull()
+      .primaryKey()
+      .$defaultFn(() => crypto.randomUUID()),
+    coverImage: d.text({ mode: 'text' }).notNull().default('fabis-default.png'),
+    title: d.text({ length: 255 }).notNull(),
+    teaser: d.text({ length: 255 }).notNull(),
+    content: d.text({ mode: 'text' }).notNull(),
+    createdAt: d.integer({ mode: 'timestamp' }).default(sql`(unixepoch())`).notNull(),
+  })
+)
