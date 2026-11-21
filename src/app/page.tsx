@@ -18,6 +18,7 @@ import {
   Mail,
 } from "lucide-react";
 import HeroSection from "@/app/_components/landing/hero-section";
+import ProfileSection from "./_components/landing/profile-section";
 import PpdbSection from "@/app/_components/landing/ppdb-section";
 import LocationSection from "@/app/_components/landing/location-section";
 
@@ -42,6 +43,29 @@ export default async function Home() {
       icon: <GraduationCap className="size-4" />,
     },
   ];
+
+  const schoolFacilities= [
+    {
+      image: "/masjid.png",
+      name: "Masjid Raya FABIS 1",
+      desc: "Kapasitas 1.200 jamaah sehari",
+    },
+    {
+      image: "/masjid.png",
+      name: "Masjid Raya FABIS 2",
+      desc: "Kapasitas 1.200 jamaah sehari",
+    },
+    {
+      image: "/masjid.png",
+      name: "Masjid Raya FABIS 3",
+      desc: "Kapasitas 1.200 jamaah sehari",
+    },
+    {
+      image: "/masjid.png",
+      name: "Masjid Raya FABIS 4",
+      desc: "Kapasitas 1.200 jamaah sehari",
+    },
+  ]
 
   const schoolInfo = [
     {
@@ -107,6 +131,7 @@ export default async function Home() {
     <HydrateClient>
       <Navbar />
       <HeroSection highlights={highlights} />
+      <ProfileSection schoolFacilities={schoolFacilities}/>
       <PpdbSection ppdb={ppdb} persyaratanSantri={persyaratanSantri} />
       <LocationSection schoolInfo={schoolInfo} />
       <Footer />
