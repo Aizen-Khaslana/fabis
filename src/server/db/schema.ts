@@ -133,6 +133,75 @@ export const verification = sqliteTable(
   (t) => [index("verification_identifier_idx").on(t.identifier)],
 );
 
+// Kelola Informasi - Hero Section 
+export const heroSection = sqliteTable("hero_section", (d) => ({
+  id: d
+    .text({ length: 255 })
+    .notNull()
+    .primaryKey()
+    .$defaultFn(() => crypto.randomUUID()),
+  ppdbYear: d.text({ length: 255 }).notNull(),
+  description: d.text({ mode: "text" }).notNull(),
+  heroImage: d.text({ mode: "text" }).notNull().default("hero.png"),
+  updatedAt: d
+    .integer({ mode: "timestamp" })
+    .default(sql`(unixepoch())`)
+    .$onUpdate(() => new Date())
+    .notNull(),
+}));
+
+// Kelola Informasi - School Facilities Section
+export const schoolFacilities = sqliteTable("school_facilities", (d) => ({
+  id: d
+    .text({ length: 255 })
+    .notNull()
+    .primaryKey()
+    .$defaultFn(() => crypto.randomUUID()),
+  title: d.text({ length: 255 }).notNull(),
+  description: d.text({ mode: "text" }).notNull(),
+  image: d.text({ mode: "text" }).notNull().default("fabis-default.png"),
+  createdAt: d
+    .integer({ mode: "timestamp" })
+    .default(sql`(unixepoch())`)
+    .notNull(),
+  updatedAt: d.integer({ mode: "timestamp" }).$onUpdate(() => new Date()),
+}));
+
+// Kelola Informasi - Registration Link Section
+export const registrationSettings = sqliteTable(
+  "registration_settings",
+  (d) => ({
+    id: d
+      .text({ length: 255 })
+      .notNull()
+      .primaryKey()
+      .$defaultFn(() => crypto.randomUUID()),
+    pamphletUrl: d.text({ mode: "text" }).notNull().default(""),
+    formUrl: d.text({ mode: "text" }).notNull().default(""),
+    updatedAt: d
+      .integer({ mode: "timestamp" })
+      .default(sql`(unixepoch())`)
+      .$onUpdate(() => new Date())
+      .notNull(),
+  }),
+);
+
+// Kelola Informasi - Registration Steps Section
+export const registrationSteps = sqliteTable("registration_steps", (d) => ({
+  id: d
+    .text({ length: 255 })
+    .notNull()
+    .primaryKey()
+    .$defaultFn(() => crypto.randomUUID()),
+  title: d.text({ length: 255 }).notNull(),
+  description: d.text({ mode: "text" }).notNull(),
+  order: d.integer({ mode: "number" }).notNull().default(0),
+  createdAt: d
+    .integer({ mode: "timestamp" })
+    .default(sql`(unixepoch())`)
+    .notNull(),
+}));
+
 export const news = sqliteTable(
   "news",
   (d) => ({
