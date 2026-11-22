@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import { useState } from "react";
 import { Calendar, Pencil, Trash2, Loader2 } from "lucide-react";
 import { type InferSelectModel } from "drizzle-orm";
@@ -30,6 +30,7 @@ export default function NewsSection({
   mode = "latest",
 }: NewsSectionProps) {
   const router = useRouter();
+  const pathname = usePathname();
   const [isManageMode, setIsManageMode] = useState(false);
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
   const [isDeleting, setIsDeleting] = useState(false);
@@ -120,6 +121,11 @@ export default function NewsSection({
           ) : (
             <Link
               href="/dashboard/news/all"
+              onClick={() => {
+                if (pathname != "dashboard/news/all") {
+                  startLoading();
+                }
+              }}
               className="text-lg text-dark-greenblue cursor-pointer hover:underline"
             >
               Lihat Semua
@@ -168,9 +174,15 @@ export default function NewsSection({
             <>
               {isManageMode && selectedIds.length === 0 && (
                 <Link
-                  href={`/dashboard/news/edit/${item.id}`}
-                  onClick={(e) => e.stopPropagation()}
-                  title="Edit berita"
+                  href={`/dashboard/news/${item.id}`}
+                  onClick={(e) => {
+                    e.stopPropagation();
+
+                    if (pathname != `/dashboard/news/${item.id}`) {
+                      startLoading();
+                    }
+                  }}
+                  title="Perbarui berita"
                   className="absolute top-3 right-3 z-20 p-2 rounded-full bg-white/90 hover:bg-white text-dark-greenblue shadow-md transition hover:scale-105"
                 >
                   <Pencil className="w-4 h-4" />
@@ -232,7 +244,12 @@ export default function NewsSection({
           return (
             <Link
               key={item.id}
-              href={`/news/${item.id}`}
+              href={`/dashboard/news/${item.id}`}
+              onClick={() => {
+                if (pathname !== `/dashboard/news/${item.id}`) {
+                  startLoading();
+                }
+              }}
               className="relative group flex flex-col rounded-3xl overflow-hidden shadow-md hover:shadow-xl hover:scale-101 transition-all duration-300 bg-[#36B5CA]"
             >
               {cardInner}
