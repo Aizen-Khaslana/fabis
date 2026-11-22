@@ -5,13 +5,16 @@ import {
     useContext,
     useEffect,
     useState,
+    useRef,
 } from "react";
 import { usePathname } from "next/navigation";
+import { toast } from "sonner";
 import Loader from "@/components/loader";
 
 interface NavigationLoaderContextType {
   startLoading: () => void;
   stopLoading: () => void;
+  finishWithToast: (message: string) => void;
 }
 
 const NavigationLoaderContext = createContext<NavigationLoaderContextType | null>(null);
@@ -23,9 +26,15 @@ export function NavigationLoaderProvider({
 }) {
   const pathname = usePathname();
   const [loading, setLoading] = useState(false);
+  const pendingToastRef = useRef<string | null>(null);
 
   useEffect(() => {
     setLoading(false);
+
+    if (pendingToastRef.current) {
+      toast.success(pendingToastRef.current);
+      pendingToastRef.current = null;
+    }
   }, [pathname]);
 
   const startLoading = () => {
@@ -34,8 +43,12 @@ export function NavigationLoaderProvider({
 
   const stopLoading = () => setLoading(false);
 
+  const finishWithToast = (message: string) => {
+    pendingToastRef.current = message;
+  };
+
   return (
-    <NavigationLoaderContext.Provider value={{ startLoading, stopLoading }}>
+    <NavigationLoaderContext.Provider value={{ startLoading, stopLoading, finishWithToast }}>
       {children}
 
       {loading && (

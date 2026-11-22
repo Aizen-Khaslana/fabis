@@ -39,7 +39,7 @@ export default function FormSection({
   const [uploadedCoverUrl, setUploadedCoverUrl] = useState(initialData?.coverImage ?? "");
   const [isUploadingImage, setIsUploadingImage] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const { startLoading, stopLoading } = useNavigationLoader();
+  const { startLoading, stopLoading, finishWithToast } = useNavigationLoader();
 
   useEffect(() => {
     if (initialData) {
@@ -125,6 +125,7 @@ export default function FormSection({
     }
 
     const payload: NewsFormData = {
+      id: initialData?.id,
       coverImage: uploadedCoverUrl,
       title: title.trim(),
       teaser: teaser.trim(),
@@ -136,12 +137,14 @@ export default function FormSection({
       return;
     }
 
+    let isRedirecting = false;
+
     try {
       setIsSubmitting(true);
       startLoading();
 
       const res = await fetch("/api/news", {
-        method: "POST",
+        method: mode === "edit" ? "PUT" : "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
       });
@@ -153,7 +156,11 @@ export default function FormSection({
         return;
       }
 
-      toast.success("Berita berhasil disimpan!");
+      // toast.success(
+      //   mode === "edit"
+      //     ? "Perubahan berita berhasil disimpan!"
+      //     : "Berita berhasil disimpan!",
+      // );
 
       if (mode === "create") {
         setTitle("");
@@ -165,14 +172,22 @@ export default function FormSection({
         if (fileInputRef.current) {
           fileInputRef.current.value = "";
         }
+        router.refresh();
+        stopLoading();
+        toast.success("Berita berhasil disimpan!");
+      } else {
+        isRedirecting = true;
+        finishWithToast("Perubahan berita berhasil disimpan!");
+        router.push("/dashboard/news/all");
+        router.refresh();
       }
-
-      router.refresh();
     } catch {
       toast.error("Gagal terhubung ke server");
     } finally {
       setIsSubmitting(false);
-      stopLoading();
+      if (!isRedirecting) {
+        stopLoading();
+      }
     }
   };
 
