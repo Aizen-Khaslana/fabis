@@ -5,7 +5,12 @@ CREATE TABLE `hero_section` (
 	`heroImage` text DEFAULT 'hero.png' NOT NULL,
 	`updatedAt` integer DEFAULT (unixepoch()) NOT NULL
 );
-
+--> statement-breakpoint
+CREATE TABLE `facility_settings` (
+	`id` text(255) PRIMARY KEY NOT NULL,
+	`subtitle` text DEFAULT '' NOT NULL,
+	`updatedAt` integer DEFAULT (unixepoch()) NOT NULL
+);
 --> statement-breakpoint
 CREATE TABLE `registration_settings` (
 	`id` text(255) PRIMARY KEY NOT NULL,
@@ -18,6 +23,9 @@ CREATE TABLE `registration_steps` (
 	`id` text(255) PRIMARY KEY NOT NULL,
 	`title` text(255) NOT NULL,
 	`description` text NOT NULL,
+	`startDate` text(50) DEFAULT '' NOT NULL,
+	`endDate` text(50) DEFAULT '' NOT NULL,
+	`isActive` integer DEFAULT 0 NOT NULL,
 	`order` integer DEFAULT 0 NOT NULL,
 	`createdAt` integer DEFAULT (unixepoch()) NOT NULL
 );

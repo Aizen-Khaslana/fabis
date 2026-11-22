@@ -133,7 +133,7 @@ export const verification = sqliteTable(
   (t) => [index("verification_identifier_idx").on(t.identifier)],
 );
 
-// Kelola Informasi - Hero Section 
+// Kelola Informasi - Hero Section
 export const heroSection = sqliteTable("hero_section", (d) => ({
   id: d
     .text({ length: 255 })
@@ -143,6 +143,21 @@ export const heroSection = sqliteTable("hero_section", (d) => ({
   ppdbYear: d.text({ length: 255 }).notNull(),
   description: d.text({ mode: "text" }).notNull(),
   heroImage: d.text({ mode: "text" }).notNull().default("hero.png"),
+  updatedAt: d
+    .integer({ mode: "timestamp" })
+    .default(sql`(unixepoch())`)
+    .$onUpdate(() => new Date())
+    .notNull(),
+}));
+
+// Kelola Informasi - Facility Section Settings (Subjudul)
+export const facilitySettings = sqliteTable("facility_settings", (d) => ({
+  id: d
+    .text({ length: 255 })
+    .notNull()
+    .primaryKey()
+    .$defaultFn(() => crypto.randomUUID()),
+  subtitle: d.text({ mode: "text" }).notNull().default(""),
   updatedAt: d
     .integer({ mode: "timestamp" })
     .default(sql`(unixepoch())`)
@@ -195,6 +210,9 @@ export const registrationSteps = sqliteTable("registration_steps", (d) => ({
     .$defaultFn(() => crypto.randomUUID()),
   title: d.text({ length: 255 }).notNull(),
   description: d.text({ mode: "text" }).notNull(),
+  startDate: d.text({ length: 50 }).notNull().default(""),
+  endDate: d.text({ length: 50 }).notNull().default(""),
+  isActive: d.integer({ mode: "boolean" }).default(false).notNull(),
   order: d.integer({ mode: "number" }).notNull().default(0),
   createdAt: d
     .integer({ mode: "timestamp" })
@@ -202,18 +220,18 @@ export const registrationSteps = sqliteTable("registration_steps", (d) => ({
     .notNull(),
 }));
 
-export const news = sqliteTable(
-  "news",
-  (d) => ({
-    id: d
-      .text({ length: 255 })
-      .notNull()
-      .primaryKey()
-      .$defaultFn(() => crypto.randomUUID()),
-    coverImage: d.text({ mode: 'text' }).notNull().default('fabis-default.png'),
-    title: d.text({ length: 255 }).notNull(),
-    teaser: d.text({ length: 255 }).notNull(),
-    content: d.text({ mode: 'text' }).notNull(),
-    createdAt: d.integer({ mode: 'timestamp' }).default(sql`(unixepoch())`).notNull(),
-  })
-)
+export const news = sqliteTable("news", (d) => ({
+  id: d
+    .text({ length: 255 })
+    .notNull()
+    .primaryKey()
+    .$defaultFn(() => crypto.randomUUID()),
+  coverImage: d.text({ mode: "text" }).notNull().default("fabis-default.png"),
+  title: d.text({ length: 255 }).notNull(),
+  teaser: d.text({ length: 255 }).notNull(),
+  content: d.text({ mode: "text" }).notNull(),
+  createdAt: d
+    .integer({ mode: "timestamp" })
+    .default(sql`(unixepoch())`)
+    .notNull(),
+}));
