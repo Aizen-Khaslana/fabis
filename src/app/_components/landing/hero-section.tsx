@@ -34,7 +34,7 @@ export default function HeroSection({
         <div className="flex w-fit gap-6 max-md:flex-col max-md:gap-2">
           <Link
             href={"#"}
-            className="font-bricolage bg-dark-greenblue hover:bg-greenblue flex cursor-pointer items-center gap-3 rounded-[999] px-8 py-2.5 text-xl text-white shadow-md inset-shadow-red-100 transition-all duration-200 max-md:text-sm"
+            className="font-bricolage bg-dark-greenblue hover:bg-greenblue flex cursor-pointer items-center gap-3 rounded-[999] px-8 py-3.5 text-xl text-white inset-shadow-red-100 transition-all duration-200 max-md:text-sm shadow-white/60 shadow-inner"
           >
             <GraduationCap />
             Daftar Sekarang
@@ -42,7 +42,7 @@ export default function HeroSection({
 
           <Link
             href={"#"}
-            className="font-bricolage hover:bg-dark-greenblue bg-greenblue flex cursor-pointer items-center gap-3 rounded-[999] px-8 py-2.5 text-xl text-white shadow-md inset-shadow-red-100 transition-all duration-200 max-md:text-sm"
+            className="font-bricolage hover:bg-dark-greenblue bg-greenblue flex cursor-pointer items-center gap-3 rounded-[999] px-8 py-3.5 text-xl text-white shadow-white/60 shadow-inner transition-all duration-200 max-md:text-sm"
           >
             <GraduationCap />
             Daftar Sekarang
@@ -53,7 +53,7 @@ export default function HeroSection({
           {highlights.map((item) => (
             <span
               key={item.label}
-              className="text-text flex items-center gap-1.5 text-base"
+              className="text-text flex items-center gap-1.5 text-[13px]"
             >
               {item.icon}
               {item.label}

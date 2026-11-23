@@ -28,8 +28,8 @@ export default function PpdbSection({
       id="ppdb"
       className="flex min-h-screen flex-col gap-4 px-18 py-40 max-md:px-7 max-md:py-30"
     >
-      <div className="flex h-full w-full items-end justify-between gap-10 max-lg:flex-col max-lg:items-start">
-        <div className="flex flex-col gap-4">
+      <div className="flex h-full w-full  items-end justify-between gap-10 max-lg:flex-col max-lg:items-start">
+        <div className="flex max-w-160 flex-col gap-4">
           <span className="font-outfit text-dark-orange flex items-center gap-2 font-semibold">
             <Megaphone />
             PENERIMAAN PESERTA DIDIK BARU TA 2027/2028
@@ -49,7 +49,7 @@ export default function PpdbSection({
           <div className="flex h-fit w-fit gap-3 max-md:flex-col max-md:gap-2">
             <Link
               href={"#"}
-              className="font-bricolage bg-dark-greenblue hover:bg-greenblue flex cursor-pointer items-center gap-3 rounded-xl px-8 py-2.5 text-lg text-white shadow-md inset-shadow-red-100 transition-all duration-200 max-md:text-sm"
+              className="font-bricolage bg-dark-greenblue hover:bg-greenblue flex cursor-pointer items-center gap-3 rounded-xl px-7 py-2.5 text-md w-full text-white shadow-white/60 shadow-inner transition-all duration-200 max-md:text-sm"
             >
               <Download />
               Unduh Pamflet
@@ -57,7 +57,7 @@ export default function PpdbSection({
 
             <Link
               href={"#"}
-              className="font-bricolage hover:bg-dark-greenblue bg-greenblue flex cursor-pointer items-center gap-3 rounded-xl px-8 py-2.5 text-lg text-white shadow-md inset-shadow-red-100 transition-all duration-200 max-md:text-sm"
+              className="font-bricolage hover:bg-dark-greenblue bg-greenblue flex cursor-pointer items-center gap-3 rounded-xl px-7 py-2.5 text-md w-full text-white shadow-white/60 shadow-inner transition-all duration-200 max-md:text-sm"
             >
               <SquareText />
               Isi Formulir Online
