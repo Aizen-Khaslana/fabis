@@ -53,7 +53,7 @@ export default function HeroSection({
           {highlights.map((item) => (
             <span
               key={item.label}
-              className="text-text flex items-center gap-1.5 text-base"
+              className="text-text flex items-center gap-1.5 text-[13px]"
             >
               {item.icon}
               {item.label}

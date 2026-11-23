@@ -374,7 +374,7 @@ export default function FacilitySection({
             <Button
               type="submit"
               disabled={isSubmitting || rows.some((r) => r.isUploading)}
-              className="w-full cursor-pointer rounded-xl bg-gradient-to-b from-[#D97706] to-[#B45309] py-6 text-base font-semibold text-white shadow-md transition-all hover:from-[#B45309] hover:to-[#92400E]"
+              className="w-full cursor-pointer rounded-xl bg-linear-to-b from-[#D97706] to-[#B45309] py-6 text-base font-semibold text-white shadow-md transition-all hover:from-[#B45309] hover:to-[#92400E]"
             >
               {rows.some((r) => r.isUploading)
                 ? "Menunggu Unggah Gambar..."

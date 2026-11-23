@@ -21,6 +21,7 @@ import HeroSection from "@/app/_components/landing/hero-section";
 import ProfileSection from "./_components/landing/profile-section";
 import PpdbSection from "@/app/_components/landing/ppdb-section";
 import LocationSection from "@/app/_components/landing/location-section";
+import NewsSection from "./_components/landing/news-section";
 
 export default async function Home() {
   const session = await getSession();
@@ -88,6 +89,37 @@ export default async function Home() {
     },
   ];
 
+  const news = [
+    {
+      id: "01",
+      coverImage: "/hero.png",
+      title: "FABIS menjuarai lomba Panahan tingkat Provinsi Jawa Borot" ,
+      teaser: "Fabis berhasil meraih gelar juara dalam lomba panahan tingkat provinsi." ,
+      createdAt: new Date()
+    },
+    {
+      id: "02",
+      coverImage: "/hero.png",
+      title: "FABIS menjuarai lomba Panahan tingkat Provinsi Jawa Borot" ,
+      teaser: "Fabis berhasil meraih gelar juara dalam lomba panahan tingkat provinsi." ,
+      createdAt: new Date()
+    },
+    {
+      id: "03",
+      coverImage: "/hero.png",
+      title: "FABIS menjuarai lomba Panahan tingkat Provinsi Jawa Borot" ,
+      teaser: "Fabis berhasil meraih gelar juara dalam lomba panahan tingkat provinsi." ,
+      createdAt: new Date()
+    },
+    {
+      id: "04",
+      coverImage: "/hero.png",
+      title: "FABIS menjuarai lomba Panahan tingkat Provinsi Jawa Borot" ,
+      teaser: "Fabis berhasil meraih gelar juara dalam lomba panahan tingkat provinsi." ,
+      createdAt: new Date()
+    },
+  ]
+
   const ppdb = [
     {
       id: "01",
@@ -132,6 +164,7 @@ export default async function Home() {
       <Navbar />
       <HeroSection highlights={highlights} />
       <ProfileSection schoolFacilities={schoolFacilities}/>
+      <NewsSection news={news} />
       <PpdbSection ppdb={ppdb} persyaratanSantri={persyaratanSantri} />
       <LocationSection schoolInfo={schoolInfo} />
       <Footer />
