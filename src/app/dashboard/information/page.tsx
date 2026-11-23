@@ -7,6 +7,7 @@ import RegistrationSection from "@/app/_components/information/registration-sect
 import { db } from "@/server/db";
 import {
   heroSection,
+  facilitySettings,
   schoolFacilities,
   registrationSettings,
   registrationSteps,
@@ -15,24 +16,22 @@ import {
 export const dynamic = "force-dynamic";
 
 export default async function Information() {
-  const [heroRows, facilities, regSettingsRows, regSteps] = await Promise.all([
-    db.select().from(heroSection).limit(1),
-    db
-      .select()
-      .from(schoolFacilities)
-      .orderBy(desc(schoolFacilities.createdAt)),
-    db.select().from(registrationSettings).limit(1),
-    db.select().from(registrationSteps).orderBy(asc(registrationSteps.order)),
-  ]);
+  const [heroRows, facSettingsRows, facilities, regSettingsRows, regSteps] =
+    await Promise.all([
+      db.select().from(heroSection).limit(1),
+      db.select().from(facilitySettings).limit(1),
+      db
+        .select()
+        .from(schoolFacilities)
+        .orderBy(desc(schoolFacilities.createdAt)),
+      db.select().from(registrationSettings).limit(1),
+      db.select().from(registrationSteps).orderBy(asc(registrationSteps.order)),
+    ]);
 
   return (
     <div className="min-h-[88vh] space-y-6 pb-10">
       <PageBreadcrumb
         items={[
-          {
-            title: "FABIS Dashboard",
-            href: "/dashboard",
-          },
           {
             title: "Kelola Informasi Website",
             href: "/dashboard/information",
@@ -41,7 +40,10 @@ export default async function Information() {
       />
       <HeaderSection />
       <HeroSection initialData={heroRows[0] ?? null} />
-      <FacilitySection initialFacilities={facilities} />
+      <FacilitySection
+        initialSubtitle={facSettingsRows[0]?.subtitle ?? ""}
+        initialFacilities={facilities}
+      />
       <RegistrationSection
         initialData={{
           pamphletUrl: regSettingsRows[0]?.pamphletUrl ?? "",
