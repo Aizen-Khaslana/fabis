@@ -4,6 +4,7 @@ import { z } from "zod";
 import { db } from "@/server/db";
 import {
   heroSection,
+  facilitySettings,
   schoolFacilities,
   registrationSettings,
   registrationSteps,
@@ -11,51 +12,101 @@ import {
 import { deleteFileFromGithub } from "@/lib/github-storage";
 
 const heroSchema = z.object({
-  ppdbYear: z.string().trim().min(1, "Tahun PPDB wajib diisi").max(255),
-  description: z.string().trim().min(1, "Deskripsi wajib diisi"),
+  ppdbYear: z
+    .string()
+    .trim()
+    .min(1, "Tahun PPDB wajib diisi")
+    .max(50, "Tahun PPDB maksimal 50 karakter"),
+  description: z
+    .string()
+    .trim()
+    .min(1, "Deskripsi wajib diisi")
+    .max(250, "Deskripsi maksimal 250 karakter"),
   heroImage: z.string().min(1, "Gambar utama wajib diisi"),
 });
 
 const facilitySchema = z.object({
+  subtitle: z
+    .string()
+    .trim()
+    .max(150, "Subjudul section maksimal 150 karakter")
+    .default(""),
   facilities: z
     .array(
       z.object({
-        title: z.string().trim().min(1, "Judul fasilitas wajib diisi").max(255),
-        description: z.string().trim().min(1, "Deskripsi fasilitas wajib diisi"),
+        title: z
+          .string()
+          .trim()
+          .min(1, "Judul fasilitas wajib diisi")
+          .max(50, "Judul fasilitas maksimal 50 karakter"),
+        description: z
+          .string()
+          .trim()
+          .min(1, "Deskripsi fasilitas wajib diisi")
+          .max(120, "Deskripsi fasilitas maksimal 120 karakter"),
         image: z.string().min(1, "Gambar fasilitas wajib diisi"),
       }),
     )
     .min(1, "Minimal harus ada 1 fasilitas"),
 });
 
+const urlField = z
+  .string()
+  .trim()
+  .refine(
+    (val) => val === "" || /^https?:\/\/.+\..+/.test(val),
+    "Format tautan tidak valid (harus diawali http:// atau https://)",
+  );
+
 const registrationSchema = z.object({
-  pamphletUrl: z.string().trim().default(""),
-  formUrl: z.string().trim().default(""),
+  pamphletUrl: urlField.default(""),
+  formUrl: urlField.default(""),
   steps: z
     .array(
-      z.object({
-        title: z.string().trim().min(1, "Judul tahapan wajib diisi").max(255),
-        description: z.string().trim().min(1, "Deskripsi tahapan wajib diisi"),
-      }),
+      z
+        .object({
+          title: z
+            .string()
+            .trim()
+            .min(1, "Judul tahapan wajib diisi")
+            .max(45, "Judul tahapan maksimal 45 karakter"),
+          description: z
+            .string()
+            .trim()
+            .min(1, "Deskripsi tahapan wajib diisi")
+            .max(130, "Deskripsi tahapan maksimal 130 karakter"),
+          startDate: z.string().trim().min(1, "Tanggal mulai wajib diisi"),
+          endDate: z.string().trim().min(1, "Tanggal berakhir wajib diisi"),
+          isActive: z.boolean().default(false),
+        })
+        .refine((step) => step.endDate >= step.startDate, {
+          message: "Tanggal berakhir tidak boleh sebelum tanggal mulai",
+        }),
     )
     .min(1, "Minimal harus ada 1 tahapan pendaftaran"),
 });
 
 export async function GET() {
   try {
-    const [hero, facilities, regSettings, regSteps] = await Promise.all([
-      db.select().from(heroSection).limit(1),
-      db
-        .select()
-        .from(schoolFacilities)
-        .orderBy(desc(schoolFacilities.createdAt)),
-      db.select().from(registrationSettings).limit(1),
-      db.select().from(registrationSteps).orderBy(asc(registrationSteps.order)),
-    ]);
+    const [hero, facSettings, facilities, regSettings, regSteps] =
+      await Promise.all([
+        db.select().from(heroSection).limit(1),
+        db.select().from(facilitySettings).limit(1),
+        db
+          .select()
+          .from(schoolFacilities)
+          .orderBy(desc(schoolFacilities.createdAt)),
+        db.select().from(registrationSettings).limit(1),
+        db
+          .select()
+          .from(registrationSteps)
+          .orderBy(asc(registrationSteps.order)),
+      ]);
 
     return NextResponse.json({
       data: {
         hero: hero[0] ?? null,
+        facilitySubtitle: facSettings[0]?.subtitle ?? "",
         facilities,
         registration: {
           pamphletUrl: regSettings[0]?.pamphletUrl ?? "",
@@ -119,6 +170,21 @@ export async function POST(req: Request) {
         );
       }
 
+      const existingFacSettings = await db
+        .select()
+        .from(facilitySettings)
+        .limit(1);
+      if (existingFacSettings[0]) {
+        await db
+          .update(facilitySettings)
+          .set({ subtitle: parsed.data.subtitle })
+          .where(eq(facilitySettings.id, existingFacSettings[0].id));
+      } else {
+        await db.insert(facilitySettings).values({
+          subtitle: parsed.data.subtitle,
+        });
+      }
+
       await db
         .delete(schoolFacilities)
         .where(isNotNull(schoolFacilities.id));
@@ -168,11 +234,16 @@ export async function POST(req: Request) {
         });
       }
 
-      await db.delete(registrationSteps).where(isNotNull(registrationSteps.id));
+      await db
+        .delete(registrationSteps)
+        .where(isNotNull(registrationSteps.id));
       await db.insert(registrationSteps).values(
         parsed.data.steps.map((step, index) => ({
           title: step.title,
           description: step.description,
+          startDate: step.startDate,
+          endDate: step.endDate,
+          isActive: step.isActive,
           order: index + 1,
         })),
       );

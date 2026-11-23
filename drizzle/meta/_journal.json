@@ -15,6 +15,13 @@
       "when": 1795299256029,
       "tag": "0001_damp_gabe_jones",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "6",
+      "when": 1795360453830,
+      "tag": "0002_tough_shooting_star",
+      "breakpoints": true
     }
   ]
 }
