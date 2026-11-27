@@ -30,7 +30,7 @@ export default async function NewsDetailPage({
           Kembali ke Daftar Berita
         </Link>
 
-        <h1 className="font-bricolage text-dark-greenblue text-3xl font-bold break-words md:text-4xl">
+        <h1 className="font-bricolage text-dark-greenblue text-3xl font-bold wrap-break-word md:text-4xl">
           {article.title}
         </h1>
 
@@ -52,7 +52,7 @@ export default async function NewsDetailPage({
           />
         </div>
 
-        <p className="font-outfit text-text leading-relaxed break-words">
+        <p className="font-outfit text-text leading-relaxed wrap-break-word">
           {article.teaser}
         </p>
       </main>

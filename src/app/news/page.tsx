@@ -33,7 +33,7 @@ export default async function NewsPage() {
           </p>
         </div>
 
-        <div className="grid-cols-4 max-md:grid-cols-2 max-sm:grid-cols-1 grid gap-4 w-full mt-8">
+        <div className="grid-cols-4 max-md:grid-cols-2 max-sm:grid-cols-1 grid gap-4 w-full mt-8 mb-18">
           {(newsData.news ?? []).map((item) => (
             <Link href={`/news/${item.id}`}
               key={item.id}
