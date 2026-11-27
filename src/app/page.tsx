@@ -72,7 +72,7 @@ export default async function Home() {
   }));
 
   const formattedPpdbSteps = landingData.registrationSteps.map((step, index) => ({
-    id: String(step.order || index + 1).padStart(2, "0"),
+    id: String(step.order ?? index + 1).padStart(2, "0"),
     title: step.title,
     description: step.description,
     startDate: step.startDate,

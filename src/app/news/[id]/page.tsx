@@ -1,0 +1,62 @@
+import Link from "next/link";
+import Image from "next/image";
+import { notFound } from "next/navigation";
+import { ArrowLeft, Calendar } from "lucide-react";
+import { api, HydrateClient } from "@/trpc/server";
+import Footer from "@/app/_components/footer";
+
+export default async function NewsDetailPage({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
+  const { id } = await params;
+
+  const landingData = await api.landing.getLandingData();
+  const article = landingData.news.find((item) => item.id == id);
+
+  if (!article) {
+    notFound();
+  }
+
+  return (
+    <HydrateClient>
+      <main className="mx-auto flex min-h-screen max-w-6xl flex-col gap-6 px-6 py-16 mb-20 md:px-12">
+        <Link
+          href="/news"
+          className="font-outfit text-dark-greenblue hover:text-dark-orange inline-flex w-fit items-center gap-2 font-medium"
+        >
+          <ArrowLeft className="size-4" />
+          Kembali ke Daftar Berita
+        </Link>
+
+        <h1 className="font-bricolage text-dark-greenblue text-3xl font-bold break-words md:text-4xl">
+          {article.title}
+        </h1>
+
+        <span className="text-muted-foreground flex items-center gap-2 text-sm">
+          <Calendar className="size-4" />
+          {article.createdAt.toLocaleDateString("id-ID", {
+            day: "numeric",
+            month: "long",
+            year: "numeric",
+          })}
+        </span>
+
+        <div className="relative h-80 w-full overflow-hidden rounded-2xl">
+          <Image
+            src={article.coverImage}
+            alt={article.title}
+            fill
+            className="object-cover w-full"
+          />
+        </div>
+
+        <p className="font-outfit text-text leading-relaxed break-words">
+          {article.teaser}
+        </p>
+      </main>
+      <Footer/>
+    </HydrateClient>
+  )
+}
