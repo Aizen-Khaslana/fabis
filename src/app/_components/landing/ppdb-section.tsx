@@ -14,14 +14,21 @@ interface PpdbItems {
   color: string;
 }
 
+interface SettingItems {
+  pamphletUrl: string;
+  formUrl: string;
+}
+
 interface PpdbSectionProps {
   ppdb: PpdbItems[];
   persyaratanSantri: string[];
+  settings?: SettingItems | null;
 }
 
 export default function PpdbSection({
   ppdb,
   persyaratanSantri,
+  settings,
 }: PpdbSectionProps) {
   return (
     <section
@@ -48,7 +55,7 @@ export default function PpdbSection({
         <div className="flex">
           <div className="flex h-fit w-fit gap-3 max-md:flex-col max-md:gap-2">
             <Link
-              href={"#"}
+              href={settings?.pamphletUrl ?? '#'}
               className="font-bricolage bg-dark-greenblue hover:bg-greenblue flex cursor-pointer items-center gap-3 rounded-xl px-7 py-2.5 text-md w-full text-white shadow-white/60 shadow-inner transition-all duration-200 max-md:text-sm"
             >
               <Download />
@@ -56,7 +63,7 @@ export default function PpdbSection({
             </Link>
 
             <Link
-              href={"#"}
+              href={settings?.formUrl ?? '#'}
               className="font-bricolage hover:bg-dark-greenblue bg-greenblue flex cursor-pointer items-center gap-3 rounded-xl px-7 py-2.5 text-md w-full text-white shadow-white/60 shadow-inner transition-all duration-200 max-md:text-sm"
             >
               <SquareText />

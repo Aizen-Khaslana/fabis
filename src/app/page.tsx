@@ -1,11 +1,3 @@
-// import { headers } from "next/headers";
-// import Link from "next/link";
-// import { redirect } from "next/navigation";
-
-// import { LatestPost } from "@/app/_components/post";
-// import { auth } from "@/server/better-auth";
-
-import { getSession } from "@/server/better-auth/server";
 import { api, HydrateClient } from "@/trpc/server";
 import Footer from "./_components/footer";
 import Navbar from "./_components/navbar";
@@ -18,55 +10,28 @@ import {
   Mail,
 } from "lucide-react";
 import HeroSection from "@/app/_components/landing/hero-section";
-import ProfileSection from "./_components/landing/profile-section";
+import ProfileSection from "@/app/_components/landing/profile-section";
 import PpdbSection from "@/app/_components/landing/ppdb-section";
 import LocationSection from "@/app/_components/landing/location-section";
-import NewsSection from "./_components/landing/news-section";
+import NewsSection from "@/app/_components/landing/news-section";
 
 export default async function Home() {
-  const session = await getSession();
-
-  if (session) {
-    void api.post.getLatest.prefetch();
-  }
+  const landingData = await api.landing.getLandingData();
 
   const highlights = [
     {
       label: "Akreditasi A BAN-S/M",
-      icon: <ShieldCheck className="size-4" />
+      icon: <ShieldCheck className="size-4" />,
     },
     {
       label: "Kemenag Terdaftar",
-      icon: <Mosque className="size-4" />
+      icon: <Mosque className="size-4" />,
     },
     {
       label: "Kurikulum Merdeka + Ma'had",
       icon: <GraduationCap className="size-4" />,
     },
   ];
-
-  const schoolFacilities= [
-    {
-      image: "/masjid.png",
-      name: "Masjid Raya FABIS 1",
-      desc: "Kapasitas 1.200 jamaah sehari",
-    },
-    {
-      image: "/masjid.png",
-      name: "Masjid Raya FABIS 2",
-      desc: "Kapasitas 1.200 jamaah sehari",
-    },
-    {
-      image: "/masjid.png",
-      name: "Masjid Raya FABIS 3",
-      desc: "Kapasitas 1.200 jamaah sehari",
-    },
-    {
-      image: "/masjid.png",
-      name: "Masjid Raya FABIS 4",
-      desc: "Kapasitas 1.200 jamaah sehari",
-    },
-  ]
 
   const schoolInfo = [
     {
@@ -89,68 +54,6 @@ export default async function Home() {
     },
   ];
 
-  const news = [
-    {
-      id: "01",
-      coverImage: "/hero.png",
-      title: "FABIS menjuarai lomba Panahan tingkat Provinsi Jawa Borot" ,
-      teaser: "Fabis berhasil meraih gelar juara dalam lomba panahan tingkat provinsi." ,
-      createdAt: new Date()
-    },
-    {
-      id: "02",
-      coverImage: "/hero.png",
-      title: "FABIS menjuarai lomba Panahan tingkat Provinsi Jawa Borot" ,
-      teaser: "Fabis berhasil meraih gelar juara dalam lomba panahan tingkat provinsi." ,
-      createdAt: new Date()
-    },
-    {
-      id: "03",
-      coverImage: "/hero.png",
-      title: "FABIS menjuarai lomba Panahan tingkat Provinsi Jawa Borot" ,
-      teaser: "Fabis berhasil meraih gelar juara dalam lomba panahan tingkat provinsi." ,
-      createdAt: new Date()
-    },
-    {
-      id: "04",
-      coverImage: "/hero.png",
-      title: "FABIS menjuarai lomba Panahan tingkat Provinsi Jawa Borot" ,
-      teaser: "Fabis berhasil meraih gelar juara dalam lomba panahan tingkat provinsi." ,
-      createdAt: new Date()
-    },
-  ]
-
-  const ppdb = [
-    {
-      id: "01",
-      title: "Registrasi Online",
-      description:
-        "Mengisi formulir biodata santri dan wali secara online serta mengunggah berkas syarat administratif.",
-      color: "bg-[#006384]/15",
-    },
-    {
-      id: "02",
-      title: "Tes Observasi & Al-Qur'an",
-      description:
-        "Uji kelayakan membaca Al-Qur'an (Tahsin/Tahfidz), wawancara komitmen wali santri, dan psikotes pemetaan minat bakat.",
-      color: "bg-[#8C4B00]/15",
-    },
-    {
-      id: "03",
-      title: "Pengumuman Kelulusan",
-      description:
-        "Hasil seleksi diumumkan melalui website resmi dan notifikasi WhatsApp langsung ke nomor wali santri.",
-      color: "bg-[#006384]/15",
-    },
-    {
-      id: "04",
-      title: "Daftar Ulang & Seragam  ",
-      description:
-        "Penyelesaian administrasi masuk, pengukuran seragam resmi, dan orientasi walisantri & mahasantri baru.",
-      color: "bg-[#8C4B00]/15",
-    },
-  ];
-
   const persyaratanSantri = [
     "Fotokopi Akta Kelahiran dan Kartu Keluarga (KK) 2 rangkap",
     "Pas foto formal santri berpakaian rapih ukuran 3x4 (4 lembar, latar biru)",
@@ -159,13 +62,42 @@ export default async function Home() {
     "Komitmen bersedia tinggal di asrama dan menaati tata tertib Ma'had",
   ];
 
+  const formattedFacilities = landingData.schoolFacilities.map((item) => ({
+    id: item.id,
+    image: item.image.startsWith("http") || item.image.startsWith("/")
+      ? item.image
+      : `/${item.image}`,
+    name: item.title,
+    desc: item.description,
+  }));
+
+  const formattedPpdbSteps = landingData.registrationSteps.map((step, index) => ({
+    id: String(step.order || index + 1).padStart(2, "0"),
+    title: step.title,
+    description: step.description,
+    startDate: step.startDate,
+    endDate: step.endDate,
+    isActive: step.isActive,
+    color: index % 2 === 0 ? "bg-[#006384]/15" : "bg-[#8C4B00]/15",
+  }));
+
   return (
     <HydrateClient>
       <Navbar />
-      <HeroSection highlights={highlights} />
-      <ProfileSection schoolFacilities={schoolFacilities}/>
-      <NewsSection news={news} />
-      <PpdbSection ppdb={ppdb} persyaratanSantri={persyaratanSantri} />
+      <HeroSection
+        highlights={highlights}
+        heroData={landingData.hero}
+      />
+      <ProfileSection
+        // subtitle={landingData.facilitySubtitle}
+        schoolFacilities={formattedFacilities}
+      />
+      <NewsSection news={landingData.news} />
+      <PpdbSection
+        ppdb={formattedPpdbSteps}
+        persyaratanSantri={persyaratanSantri}
+        settings={landingData.registrationSettings}
+      />
       <LocationSection schoolInfo={schoolInfo} />
       <Footer />
     </HydrateClient>
