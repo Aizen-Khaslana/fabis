@@ -45,14 +45,6 @@ export default function HeroSection({
             <GraduationCap />
             Daftar Sekarang
           </Link>
-
-          <Link
-            href={"#"}
-            className="font-bricolage hover:bg-dark-greenblue bg-greenblue flex cursor-pointer items-center gap-3 rounded-[999] px-8 py-3.5 text-xl text-white shadow-inner shadow-white/60 transition-all duration-200 max-md:text-sm"
-          >
-            <GraduationCap />
-            Daftar Sekarang
-          </Link>
         </div>
 
         <div className="flex gap-4 max-md:flex-col">
@@ -68,13 +60,12 @@ export default function HeroSection({
         </div>
       </div>
 
-      <div className="flex flex-6">
+      <div className="relative flex-6 aspect-4/3 w-full overflow-hidden rounded-3xl">
         <Image
           src={heroData?.heroImage ?? "/hero.png"}
-          width={800}
-          height={800}
+          fill
           alt="Fabis Image"
-          className="rounded-3xl"
+          className="object-cover"
         />
       </div>
     </section>
