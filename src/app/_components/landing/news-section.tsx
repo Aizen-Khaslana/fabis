@@ -24,7 +24,7 @@ export default function NewsSection({
 }: NewsSectionProps) {
   return (
     <section
-      id="ppdb"
+      id="news"
       className="flex min-h-[50vh] flex-col gap-4 px-18 py-40 max-md:px-7 max-md:py-30"
     >
       <div className="flex h-full w-full items-end justify-between gap-10 max-lg:flex-col max-lg:items-start">

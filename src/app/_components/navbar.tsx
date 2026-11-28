@@ -10,10 +10,10 @@ export default function Navbar() {
 
   const navItems = [
     { label: "Beranda", href: "/" },
-    { label: "Tentang Kami", href: "#" },
-    { label: "Berita", href: "/news"},
-    { label: "PPDB", href: "#ppdb" },
-    { label: "Lokasi", href: "#location" },
+    { label: "Tentang Kami", href: "/#tentang-kami" },
+    { label: "Berita", href: "/#news" },
+    { label: "PPDB", href: "/#ppdb" },
+    { label: "Lokasi", href: "/#location" },
   ];
 
   return (
@@ -55,6 +55,7 @@ export default function Navbar() {
             <Link
               key={item.href}
               href={item.href}
+              onClick={() => setIsOpen(false)}
               className="font-bricolage transition-all duration-200 hover:font-bold"
             >
               {item.label}
