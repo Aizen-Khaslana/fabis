@@ -81,6 +81,14 @@ export default async function Home() {
     color: index % 2 === 0 ? "bg-[#006384]/15" : "bg-[#8C4B00]/15",
   }));
 
+  const formattedNews = landingData.news.map((item) => ({
+    ...item,
+    coverImage:
+      item.coverImage.startsWith("http") || item.coverImage.startsWith("/")
+        ? item.coverImage
+        : `/${item.coverImage}`,
+  }));
+
   return (
     <HydrateClient>
       <Navbar />
@@ -89,10 +97,10 @@ export default async function Home() {
         heroData={landingData.hero}
       />
       <ProfileSection
-        // subtitle={landingData.facilitySubtitle}
+        facilitiesDesc={landingData.facilitySubtitle}
         schoolFacilities={formattedFacilities}
       />
-      <NewsSection news={landingData.news} />
+      <NewsSection news={formattedNews} />
       <PpdbSection
         ppdb={formattedPpdbSteps}
         persyaratanSantri={persyaratanSantri}

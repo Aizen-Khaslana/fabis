@@ -9,11 +9,13 @@ export interface SchoolInfoItems {
 }
 
 interface ProfileSectionProps {
+  facilitiesDesc?: string;
   schoolFacilities: SchoolInfoItems[];
 }
 
 export default function ProfileSection({
-  schoolFacilities
+  facilitiesDesc = "Dirancang untuk menunjang kenyamanan belajar, ibadah, dan tumbuh kembang fisik santri",
+  schoolFacilities,
 }: ProfileSectionProps) {
   return (
     <section id="tentang-kami" className="flex flex-col w-full items-center gap-4 mb-32 px-18 max-md:px-7 justify-center max-md:py-30">
@@ -32,7 +34,9 @@ export default function ProfileSection({
 
       <div className="flex flex-col items-start justify-start w-full gap-3 mt-10">
         <h3 className="font-bricolage text-center max-w-200 text-dark-greenblue text-4xl font-bold">Fasilitas Unggulan</h3>
-        <p>Dirancang untuk menunjang kenyamanan belajar, ibadah, dan tumbuh kembang fisik santri</p>
+        <p>
+          {facilitiesDesc}
+        </p>
         <div className="grid-cols-3 max-lg:grid-cols-2 max-md:grid-cols-1 grid gap-3 w-full mt-2">
           {schoolFacilities.map((item) => (
             <div key={item.name}
