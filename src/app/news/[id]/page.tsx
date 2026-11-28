@@ -30,10 +30,30 @@ export default async function NewsDetailPage({
           Kembali ke Daftar Berita
         </Link>
 
-        <h1 className="font-bricolage text-dark-greenblue text-3xl font-bold wrap-break-word md:text-4xl">
-          {article.title}
-        </h1>
+        <nav aria-label="Breadcrumb" className="font-outfit flex items-center gap-2 text-sm text-gray-500">
+          <Link href="/" className="hover:text-dark-greenblue transition-colors">
+            Beranda
+          </Link>
+          <span>/</span>
+          <Link href="/news" className="hover:text-dark-greenblue transition-colors">
+            Berita
+          </Link>
+          <span>/</span>
+          <span className="text-dark-greenblue line-clamp-1 font-medium">
+            {article.title}
+          </span>
+        </nav>
 
+        <div className="flex flex-col gap-1">
+          <h1 className="font-bricolage text-dark-greenblue text-3xl font-bold wrap-break-word md:text-4xl">
+            {article.title}
+          </h1>
+
+          <p className="font-outfit text-text leading-relaxed wrap-break-word">
+            {article.teaser}
+          </p>
+        </div>
+        
         <span className="text-muted-foreground flex items-center gap-2 text-sm">
           <Calendar className="size-4" />
           {article.createdAt.toLocaleDateString("id-ID", {
@@ -52,9 +72,10 @@ export default async function NewsDetailPage({
           />
         </div>
 
-        <p className="font-outfit text-text leading-relaxed wrap-break-word">
-          {article.teaser}
-        </p>
+        <div
+          className="font-outfit text-black leading-relaxed wrap-break-word [&_h2]:text-2xl [&_h2]:font-bold [&_h2]:mb-2 [&_ul]:list-disc [&_ul]:pl-6 [&_ol]:list-decimal [&_ol]:pl-6 [&_p]:mb-3"
+          dangerouslySetInnerHTML={{ __html: article.content }}
+        />
       </main>
       <Footer/>
     </HydrateClient>
