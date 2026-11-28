@@ -12,6 +12,7 @@ interface PpdbItems {
   title: string;
   description: string;
   color: string;
+  isActive: boolean;
 }
 
 interface SettingItems {
@@ -77,10 +78,10 @@ export default function PpdbSection({
         {ppdb.map((item) => (
           <div
             key={item.id}
-            className="flex w-full flex-col gap-8 rounded-xl bg-white px-6 py-6 shadow-sm"
+            className={`flex w-full flex-col gap-8 rounded-xl bg-white px-6 py-6 shadow-sm ${item.isActive ? "border-2 border-dark-orange bg-yellow-mango/20" : ""}`}
           >
             <div
-              className={`${item.color} font-bricolage w-fit rounded-sm px-4 py-3 font-bold`}
+              className={`${item.color} font-bricolage w-fit rounded-sm px-4 py-3 font-bold ${item.isActive ? "bg-dark-orange text-white" : ""}`}
             >
               {item.id}
             </div>
