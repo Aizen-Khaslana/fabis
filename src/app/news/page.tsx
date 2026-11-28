@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { api, HydrateClient } from "@/trpc/server";
+import Navbar from "../_components/navbar";
 import Footer from "../_components/footer";
 import { ArrowLeft, Newspaper } from "lucide-react";
 import NewsList from "./_components/news-list";
@@ -9,7 +10,8 @@ export default async function NewsPage() {
 
   return (
     <HydrateClient>
-      <div className="flex min-h-screen flex-col gap-4 p-20 max-md:py-10 max-md:px-7">
+      <Navbar />
+      <div className="flex min-h-screen flex-col gap-4 p-20 max-md:py-28 py-35 max-md:px-7">
         <Link
           href="/"
           className="font-outfit text-dark-greenblue hover:text-dark-orange mb-2 inline-flex w-fit items-center gap-2 font-medium transition-colors"
