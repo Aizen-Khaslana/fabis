@@ -39,7 +39,7 @@ export default function HeroSection({
 
         <div className="flex w-fit gap-6 max-md:flex-col max-md:gap-2">
           <Link
-            href={"#"}
+            href="#ppdb"
             className="font-bricolage bg-dark-greenblue hover:bg-greenblue flex cursor-pointer items-center gap-3 rounded-[999] px-8 py-3.5 text-xl text-white shadow-inner shadow-white/60 inset-shadow-red-100 transition-all duration-200 max-md:text-sm"
           >
             <GraduationCap />

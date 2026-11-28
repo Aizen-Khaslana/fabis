@@ -5,6 +5,7 @@ import { ArrowUpRight, MapPin } from "lucide-react"
 const footItems = [
   { label: "Beranda", href: "/"},
   { label: "Tentang Kami", href: "#"},
+  { label: "Berita", href: "/news"},
   { label: "PPDB", href:"#ppdb"},
   { label: "Lokasi", href:"#location"}
 ]

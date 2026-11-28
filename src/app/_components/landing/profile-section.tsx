@@ -16,7 +16,7 @@ export default function ProfileSection({
   schoolFacilities
 }: ProfileSectionProps) {
   return (
-    <section id="location" className="flex flex-col w-full items-center gap-4 mb-32 px-18 max-md:px-7 justify-center max-md:py-30">
+    <section id="tentang-kami" className="flex flex-col w-full items-center gap-4 mb-32 px-18 max-md:px-7 justify-center max-md:py-30">
       <span className="font-outfit text-dark-orange justify-center w-full flex items-center gap-2 font-semibold">
         <CircleStar />
         Profil Lembaga & Fasilitas Sekolah
