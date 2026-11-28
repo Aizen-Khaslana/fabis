@@ -12,8 +12,8 @@ export default async function NewsDetailPage({
 }) {
   const { id } = await params;
 
-  const landingData = await api.landing.getLandingData();
-  const article = landingData.news.find((item) => item.id == id);
+  const allNews = await api.landing.getAllNews();
+  const article = allNews.find((item) => item.id == id);
 
   if (!article) {
     notFound();

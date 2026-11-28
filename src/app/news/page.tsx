@@ -5,7 +5,7 @@ import { ArrowLeft, Newspaper, Calendar } from "lucide-react";
 import Image from "next/image";
 
 export default async function NewsPage() {
-  const newsData = await api.landing.getLandingData();
+  const allNews = await api.landing.getAllNews();
 
   return (
     <HydrateClient>
@@ -34,7 +34,7 @@ export default async function NewsPage() {
         </div>
 
         <div className="grid-cols-4 max-md:grid-cols-2 max-sm:grid-cols-1 grid gap-4 w-full mt-8 mb-18">
-          {(newsData.news ?? []).map((item) => (
+          {(allNews ?? []).map((item) => (
             <Link href={`/news/${item.id}`}
               key={item.id}
               className="group relative overflow-hidden min-w-full justify-end flex flex-col min-h-80 rounded-2xl gap-1 cursor-pointer shadow-[inset_0_0_15px_rgba(255,255,255,0.8)] shadow-white/60"

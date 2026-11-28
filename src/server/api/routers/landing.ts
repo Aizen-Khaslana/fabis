@@ -43,4 +43,10 @@ export const landingRouter = createTRPCRouter({
       news: newsData,
     };
   }),
+
+  getAllNews: publicProcedure.query(async ({ ctx }) => {
+    return ctx.db.query.news.findMany({
+      orderBy: [desc(news.createdAt)],
+    });
+  }),
 });
